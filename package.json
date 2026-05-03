@@ -1,0 +1,20 @@
+{
+  "name": "security-awareness-platform",
+  "version": "1.0.0",
+  "description": "Security Awareness Platform — Interactive cybersecurity training sourced from SANS, OWASP, ISC², CISA KEV, and NIST NVD.",
+  "main": "proxy.js",
+  "scripts": {
+    "proxy": "node proxy.js",
+    "dev": "node proxy.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,17 @@
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.production
+ 
+# Node dependencies
+node_modules/
+ 
+# Vercel build output
+.vercel/
+ 
+# OS files
+.DS_Store
+Thumbs.db
+ 
+# Editor
+.vscode/

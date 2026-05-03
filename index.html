@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Awareness Platform — SAP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;600;700;800;900&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&family=Nunito:wght@400;600;700;800&family=Outfit:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── SCAN LINES OVERLAY ── -->
+<div class="scanlines"></div>
+<div class="grid-bg"></div>
+
+<!-- ── UPDATE BANNER ── -->
+<div class="update-banner" id="updateBanner">
+  <div class="ub-inner">
+    <span class="ub-pulse"></span>
+    <span class="ub-org" id="ubOrg">SANS @RISK</span>
+    <span class="ub-sep">|</span>
+    <span class="ub-msg" id="ubMsg">Vol.26 No.17 — 12 new CVE challenges added · Citrix XenServer · Apache Camel · Linux Kernel</span>
+    <span class="ub-date" id="ubDate">Apr 30, 2026</span>
+    <button class="ub-close" onclick="document.getElementById('updateBanner').style.display='none'">✕</button>
+  </div>
+</div>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="nav-brand" onclick="showScreen('home')">
+    <div class="nav-logo">
+      <span class="logo-bracket">[</span>
+      <span class="logo-text">SAP</span>
+      <span class="logo-bracket">]</span>
+    </div>
+    <div class="nav-title">Security Awareness Platform</div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn" onclick="showScreen('home')">🏠 Home</button>
+    <button class="nav-btn" onclick="showScreen('game')" id="navPlay">▶ Train</button>
+    <button class="nav-btn" onclick="openModal('updateLog')">📡 Intel Feed</button>
+    <button class="nav-btn" onclick="openModal('leaderboard')">🏆 Leaderboard</button>
+    <button class="nav-btn" onclick="openModal('certs')">🎖️ Certs</button>
+    <button class="nav-btn" id="navWritten" onclick="openWrittenLab()" style="border:1px solid rgba(124,58,237,0.3);color:var(--purple);opacity:0.4" title="Solve 5 challenges to unlock Written Lab">✍️ Written Lab</button>
+  </div>
+  <div class="nav-hud">
+    <div class="hud-item">
+      <span class="hud-icon">⚡</span>
+      <span class="hud-val" id="hudScore">0</span>
+    </div>
+    <div class="hud-item">
+      <span class="hud-icon">🎯</span>
+      <span class="hud-val" id="hudSolved">0</span>
+    </div>
+    <div class="hud-rank" id="hudRank">RECRUIT</div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════ -->
+<div id="homeScreen" class="screen active">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-tag">CLASSIFIED TRAINING SYSTEM // v2.6.17</div>
+    <h1 class="hero-title">
+      <span class="hero-line1">SECURITY</span>
+      <span class="hero-line2">AWARENESS</span>
+      <span class="hero-line3">PLATFORM</span>
+    </h1>
+    <p class="hero-sub">Master real-world cyber threats through interactive challenges sourced from SANS, OWASP, ISC², CISA, and live CVE feeds. Built for SOC analysts, developers, red teams, and government security personnel.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showScreen('game')">
+        <span class="btn-icon">▶</span> BEGIN TRAINING
+      </button>
+      <button class="btn-secondary" onclick="openModal('about')">
+        <span class="btn-icon">◉</span> MISSION BRIEF
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">1,000+</div><div class="hstat-lbl">Challenges</div></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><div class="hstat-num">8</div><div class="hstat-lbl">Challenge Types</div></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><div class="hstat-num">12</div><div class="hstat-lbl">Categories</div></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><div class="hstat-num">Live</div><div class="hstat-lbl">CVE Feed</div></div>
+    </div>
+  </div>
+
+  <!-- Source orgs -->
+  <div class="sources-row">
+    <div class="src-label">INTELLIGENCE SOURCES</div>
+    <div class="sources">
+      <div class="src-badge sans">SANS</div>
+      <div class="src-badge owasp">OWASP</div>
+      <div class="src-badge isc">ISC²</div>
+      <div class="src-badge cisa">CISA</div>
+      <div class="src-badge nist">NIST NVD</div>
+      <div class="src-badge htb">HackTheBox</div>
+      <div class="src-badge thm">TryHackMe</div>
+    </div>
+  </div>
+
+  <!-- Category cards -->
+  <div class="section-header">
+    <div class="sec-line"></div>
+    <div class="sec-title">TRAINING MODULES</div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="cat-grid" id="catGrid"></div>
+
+  <!-- Challenge type cards -->
+  <div class="section-header">
+    <div class="sec-line"></div>
+    <div class="sec-title">CHALLENGE FORMATS</div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="type-grid">
+    <div class="type-card">
+      <div class="type-icon">🎯</div>
+      <div class="type-name">Multiple Choice</div>
+      <div class="type-desc">4-option threat identification from real CVEs and attack scenarios</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">🔍</div>
+      <div class="type-name">Identify the Threat</div>
+      <div class="type-desc">Read a log, code snippet, or packet capture — classify the attack type</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">✓✗</div>
+      <div class="type-name">True / False</div>
+      <div class="type-desc">Evaluate security configurations and statements — right or wrong?</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">⬜</div>
+      <div class="type-name">Fill in the Blank</div>
+      <div class="type-desc">Complete commands, configs, and CVE details from memory</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">⤢</div>
+      <div class="type-name">Severity Ranking</div>
+      <div class="type-desc">Order CVEs and threats by CVSS score and real-world impact</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">⚡</div>
+      <div class="type-name">Spot the Vuln</div>
+      <div class="type-desc">Identify the vulnerable line or config in a real code sample</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">⇄</div>
+      <div class="type-name">Match & Map</div>
+      <div class="type-desc">Connect attack techniques to MITRE ATT&CK tactics and definitions</div>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">📋</div>
+      <div class="type-name">CVE Brief</div>
+      <div class="type-desc">Read a real CVE advisory and answer 3 rapid-fire questions</div>
+    </div>
+  </div>
+
+</div><!-- /homeScreen -->
+
+<!-- ══════════════════════════════════
+     GAME SCREEN
+══════════════════════════════════ -->
+<div id="gameScreen" class="screen">
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <div class="filter-label">MODULE:</div>
+    <div class="filter-pills" id="filterPills"></div>
+    <div class="filter-diff">
+      <button class="diff-btn active" onclick="setDiff('All')">ALL</button>
+      <button class="diff-btn easy" onclick="setDiff('Easy')">EASY</button>
+      <button class="diff-btn med" onclick="setDiff('Medium')">MED</button>
+      <button class="diff-btn hard" onclick="setDiff('Hard')">HARD</button>
+    </div>
+  </div>
+
+  <!-- Main game layout -->
+  <div class="game-layout">
+
+    <!-- Left: challenge card -->
+    <div class="challenge-col">
+      <div class="ch-card" id="chCard">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="ch-nav">
+        <button class="nav-arrow" onclick="go(-1)">← PREV</button>
+        <div class="ch-counter" id="chCounter">1 / 0</div>
+        <button class="nav-arrow" onclick="go(1)">NEXT →</button>
+      </div>
+    </div>
+
+    <!-- Right: sidebar -->
+    <div class="sidebar">
+
+      <!-- Progress -->
+      <div class="sb-card">
+        <div class="sb-title">MISSION PROGRESS</div>
+        <div class="progress-ring-wrap">
+          <svg class="progress-ring" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="42"/>
+            <circle class="ring-fill" cx="50" cy="50" r="42" id="ringFill"/>
+          </svg>
+          <div class="ring-text">
+            <div class="ring-num" id="ringNum">0</div>
+            <div class="ring-lbl">solved</div>
+          </div>
+        </div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+          <div class="prog-lbl" id="progLbl">0 / 0</div>
+        </div>
+        <div class="sb-stats">
+          <div class="sb-stat"><span class="ss-val" id="ssScore">0</span><span class="ss-lbl">pts</span></div>
+          <div class="sb-stat"><span class="ss-val" id="ssStreak">0</span><span class="ss-lbl">streak</span></div>
+          <div class="sb-stat"><span class="ss-val" id="ssTrophies">0</span><span class="ss-lbl">trophies</span></div>
+        </div>
+      </div>
+
+      <!-- Rank card -->
+      <div class="sb-card rank-card">
+        <div class="sb-title">CLEARANCE LEVEL</div>
+        <div class="rank-display" id="rankDisplay">
+          <div class="rank-icon" id="rankIcon">🔵</div>
+          <div class="rank-name" id="rankName">RECRUIT</div>
+          <div class="rank-sub" id="rankSub">0 pts to next level</div>
+        </div>
+        <div class="rank-bar"><div class="rank-fill" id="rankFill"></div></div>
+      </div>
+
+      <!-- Intel feed mini -->
+      <div class="sb-card">
+        <div class="sb-title">LIVE INTEL FEED
+          <span class="live-dot"></span>
+        </div>
+        <div class="intel-list" id="intelList"></div>
+        <button class="sb-link" onclick="openModal('updateLog')">View full feed →</button>
+      </div>
+
+      <!-- Reset -->
+      <div class="sb-card" style="text-align:center;padding:12px">
+        <button class="btn-reset" onclick="resetProgress()">↺ Reset Progress</button>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /gameScreen -->
+
+<!-- ══════════════════════════════════
+     MODALS
+══════════════════════════════════ -->
+
+<!-- Trophy toast -->
+<div class="trophy-toast" id="trophyToast">
+  <div class="tt-glow"></div>
+  <div class="tt-icon" id="ttIcon">🏆</div>
+  <div class="tt-label">ACHIEVEMENT UNLOCKED</div>
+  <div class="tt-name" id="ttName">—</div>
+  <div class="tt-desc" id="ttDesc">—</div>
+</div>
+
+<!-- Solved notif -->
+<div class="solved-notif" id="solvedNotif"></div>
+
+<!-- Update Log Modal -->
+<div class="modal-overlay" id="updateLogModal" onclick="closeModalClick(event,'updateLogModal')">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <div class="modal-title">📡 INTEL FEED — LIVE CVE UPDATES</div>
+      <button class="modal-close" onclick="closeModal('updateLogModal')">✕</button>
+    </div>
+    <div class="modal-body" id="updateLogBody"></div>
+  </div>
+</div>
+
+<!-- Leaderboard Modal -->
+<div class="modal-overlay" id="leaderboardModal" onclick="closeModalClick(event,'leaderboardModal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">🏆 LEADERBOARD</div>
+      <button class="modal-close" onclick="closeModal('leaderboardModal')">✕</button>
+    </div>
+    <div class="modal-body" id="lbBody"></div>
+  </div>
+</div>
+
+<!-- Certs Modal -->
+<div class="modal-overlay" id="certsModal" onclick="closeModalClick(event,'certsModal')">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <div class="modal-title">🎖️ CERTIFICATES & TROPHIES</div>
+      <button class="modal-close" onclick="closeModal('certsModal')">✕</button>
+    </div>
+    <div class="modal-body" id="certsBody"></div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div class="modal-overlay" id="aboutModal" onclick="closeModalClick(event,'aboutModal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">◉ MISSION BRIEF</div>
+      <button class="modal-close" onclick="closeModal('aboutModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:13px;line-height:1.8">
+        The Security Awareness Platform (SAP) is an interactive training system built for security professionals, developers, SOC analysts, and government personnel who need to stay current with evolving cyber threats.
+      </p>
+      <br>
+      <p style="font-size:13px;color:var(--dim);line-height:1.8">
+        Every challenge is sourced from authoritative organizations: SANS @RISK, OWASP Top 10, ISC² body of knowledge, CISA Known Exploited Vulnerabilities catalog, and NIST NVD. The Intel Feed pulls directly from real advisories — when SANS publishes a new @RISK newsletter, new challenges appear within 48 hours.
+      </p>
+      <br>
+      <div style="background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);border-radius:8px;padding:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:0.1em;margin-bottom:8px">INTENDED AUDIENCE</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.8">
+          ◆ SOC Analysts & Incident Responders<br>
+          ◆ Application Developers & DevSecOps<br>
+          ◆ Government & DoD Security Personnel<br>
+          ◆ Penetration Testers & Red Teams<br>
+          ◆ Security Students & Bootcamp Graduates<br>
+          ◆ CISOs & Security Managers
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hint Modal -->
+<div class="modal-overlay" id="hintModal" onclick="closeModalClick(event,'hintModal')">
+  <div class="modal-box small">
+    <div class="modal-header">
+      <div class="modal-title">💡 HINT</div>
+      <button class="modal-close" onclick="closeModal('hintModal')">✕</button>
+    </div>
+    <div class="modal-body" id="hintBody"></div>
+  </div>
+</div>
+
+
+<!-- ── FONT PICKER PANEL ── -->
+<div id="fontPicker" style="position:fixed;bottom:24px;left:24px;z-index:999;background:rgba(11,17,32,0.97);border:1px solid rgba(0,212,255,0.3);border-radius:14px;padding:18px 20px;width:280px;box-shadow:0 8px 40px rgba(0,0,0,0.6);backdrop-filter:blur(12px)">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;color:#00d4ff;letter-spacing:0.15em">FONT SELECTOR</div>
+    <button onclick="document.getElementById('fontPicker').style.display='none'" style="background:none;border:none;color:#4a6080;cursor:pointer;font-size:14px;line-height:1">✕</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px" id="fontOptions">
+    <div class="font-opt" onclick="setFont('Exo 2','font-sample-exo')" id="font-opt-exo">
+      <div class="font-sample" id="font-sample-exo" style="font-family:'Exo 2',sans-serif">Exo 2 — Current Font</div>
+      <div class="font-meta">Geometric sans · Easy to read</div>
+    </div>
+    <div class="font-opt" onclick="setFont('Orbitron','font-sample-orb')" id="font-opt-orb">
+      <div class="font-sample" id="font-sample-orb" style="font-family:'Orbitron',sans-serif">Orbitron — Cyber Style</div>
+      <div class="font-meta">Futuristic · Strong personality</div>
+    </div>
+    <div class="font-opt" onclick="setFont('Syne','font-sample-syne')" id="font-opt-syne">
+      <div class="font-sample" id="font-sample-syne" style="font-family:'Syne',sans-serif">Syne — Modern Bold</div>
+      <div class="font-meta">Editorial · Very readable</div>
+    </div>
+    <div class="font-opt" onclick="setFont('DM Sans','font-sample-dm')" id="font-opt-dm">
+      <div class="font-sample" id="font-sample-dm" style="font-family:'DM Sans',sans-serif">DM Sans — Clean & Clear</div>
+      <div class="font-meta">Neutral · Maximum readability</div>
+    </div>
+    <div class="font-opt active" onclick="setFont('Space Grotesk','font-sample-sg')" id="font-opt-sg">
+      <div class="font-sample" id="font-sample-sg" style="font-family:'Space Grotesk',sans-serif">Space Grotesk — Tech Feel</div>
+      <div class="font-meta">Quirky techy · Great legibility</div>
+    </div>
+    <div class="font-opt" onclick="setFont('Nunito','font-sample-nun')" id="font-opt-nun">
+      <div class="font-sample" id="font-sample-nun" style="font-family:'Nunito',sans-serif">Nunito — Friendly Round</div>
+      <div class="font-meta">Rounded · Super readable</div>
+    </div>
+    <div class="font-opt" onclick="setFont('Outfit','font-sample-out')" id="font-opt-out">
+      <div class="font-sample" id="font-sample-out" style="font-family:'Outfit',sans-serif">Outfit — Modern Clean</div>
+      <div class="font-meta">Contemporary · Sharp & clear</div>
+    </div>
+    <div class="font-opt" onclick="setFont('Barlow','font-sample-bar')" id="font-opt-bar">
+      <div class="font-sample" id="font-sample-bar" style="font-family:'Barlow',sans-serif">Barlow — Condensed Pro</div>
+      <div class="font-meta">Military/Gov feel · Compact</div>
+    </div>
+    <div class="font-opt" onclick="setFont('Inter','font-sample-int')" id="font-opt-int">
+      <div class="font-sample" id="font-sample-int" style="font-family:'Inter',sans-serif">Inter — UI Standard</div>
+      <div class="font-meta">Industry standard · Neutral</div>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,212,255,0.1);font-family:'Share Tech Mono',monospace;font-size:9px;color:#4a6080;text-align:center">
+    Click any font to preview it live on the questions
+  </div>
+</div>
+
+<style>
+.font-opt{padding:10px 12px;border-radius:8px;border:1px solid rgba(0,212,255,0.12);cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.02)}
+.font-opt:hover{border-color:rgba(0,212,255,0.35);background:rgba(0,212,255,0.06)}
+.font-opt.active{border-color:#00d4ff;background:rgba(0,212,255,0.1)}
+.font-sample{font-size:15px;font-weight:700;color:#ffffff;line-height:1.3;margin-bottom:2px}
+.font-meta{font-family:'Share Tech Mono',monospace;font-size:9px;color:#4a6080;letter-spacing:0.05em}
+</style>
+
+<script>
+function setFont(fontName, sampleId) {
+  // Apply to body text and question card
+  document.querySelectorAll('.ch-title,.ch-desc,.opt-text,.tf-btn,.fitb-input,.fitb-submit,.spotv-line,.match-item').forEach(el=>{
+    el.style.fontFamily = "'" + fontName + "', sans-serif";
+  });
+  document.querySelector('body').style.setProperty('--font-body', "'" + fontName + "', sans-serif");
+  // Update active state
+  document.querySelectorAll('.font-opt').forEach(o=>o.classList.remove('active'));
+  const id = sampleId.replace('font-sample-','font-opt-');
+  document.getElementById(id)?.classList.add('active');
+  // Re-render to pick up the CSS variable change
+  if(typeof render === 'function') render();
+  localStorage.setItem('sap_font', fontName);
+}
+// Restore saved font on load
+window.addEventListener('load', ()=>{
+  const saved = localStorage.getItem('sap_font') || 'Space Grotesk';
+  if(saved) {
+    const sampleMap = {
+      'Exo 2':'font-sample-exo','Orbitron':'font-sample-orb','Syne':'font-sample-syne',
+      'DM Sans':'font-sample-dm','Space Grotesk':'font-sample-sg','Nunito':'font-sample-nun',
+      'Outfit':'font-sample-out','Barlow':'font-sample-bar','Inter':'font-sample-int'
+    };
+    if(sampleMap[saved]) setFont(saved, sampleMap[saved]);
+  }
+});
+</script>
+
+
+<!-- ── WRITTEN CHALLENGE LAB OVERLAY ── -->
+<div class="modal-overlay" id="writtenLabOverlay" onclick="if(event.target===this)closeWrittenLab()">
+  <div class="modal-box" style="max-width:780px;width:96%;max-height:90vh">
+    <div class="modal-header" style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(0,212,255,0.05))">
+      <div>
+        <div class="modal-title">✍️ WRITTEN CHALLENGE LAB</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-top:3px">
+          Open-ended responses · AI-scored · Unlocks after 5 wins
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeWrittenLab()">✕</button>
+    </div>
+    <div class="modal-body" id="writtenBody" style="padding:24px">
+      <div style="text-align:center;color:var(--dim);font-family:'Share Tech Mono',monospace;padding:40px">
+        Loading...
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Written Challenge Lab styles */
+.wc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.wc-counter{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-left:auto}
+.wc-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:12px;line-height:1.3}
+.wc-prompt{font-size:15px;color:#d0dff0;line-height:1.8;margin-bottom:14px;
+  background:rgba(0,212,255,0.04);border-left:3px solid rgba(0,212,255,0.3);
+  padding:14px 16px;border-radius:0 8px 8px 0;font-weight:500}
+.wc-hint{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);
+  margin-bottom:14px;padding:8px 12px;background:rgba(255,215,0,0.05);
+  border:1px solid rgba(255,215,0,0.15);border-radius:6px}
+.wc-input{width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(0,212,255,0.25);
+  border-radius:10px;color:#ffffff;font-family:'Space Grotesk',sans-serif;font-size:14px;
+  line-height:1.7;padding:14px 16px;resize:vertical;outline:none;
+  transition:border-color 0.2s;font-weight:400}
+.wc-input:focus{border-color:var(--cyan);box-shadow:0 0 15px rgba(0,212,255,0.1)}
+.wc-input::placeholder{color:var(--dim)}
+.wc-actions{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.wc-prev,.wc-next{background:transparent;border:1px solid var(--border);color:var(--dim2);
+  font-family:'Share Tech Mono',monospace;font-size:11px;padding:8px 14px;border-radius:6px;
+  cursor:pointer;transition:all 0.2s}
+.wc-prev:hover,.wc-next:hover{border-color:var(--cyan);color:var(--cyan)}
+.wc-word-count{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);flex:1;text-align:center}
+.wc-submit{background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(124,58,237,0.15));
+  border:1px solid rgba(124,58,237,0.5);color:#c4b5fd;
+  font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;
+  padding:10px 20px;border-radius:8px;cursor:pointer;transition:all 0.2s;letter-spacing:0.08em}
+.wc-submit:hover:not(:disabled){background:rgba(124,58,237,0.4);border-color:var(--purple)}
+.wc-submit:disabled{opacity:0.6;cursor:not-allowed}
+.wc-feedback{margin-top:20px;border-radius:12px;overflow:hidden}
+.wc-loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:32px;
+  font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--dim)}
+.wc-spinner{width:32px;height:32px;border:3px solid var(--border);
+  border-top-color:var(--purple);border-radius:50%;
+  animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wc-result{padding:20px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:12px}
+.wc-score-row{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.wc-score-badge{border:2px solid;border-radius:10px;padding:10px 20px;text-align:center}
+.wc-grade{display:block;font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;line-height:1}
+.wc-stars{font-size:16px;letter-spacing:2px}
+.wc-pts-earned{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--green);font-weight:700}
+.wc-summary{font-size:14px;color:#d0dff0;line-height:1.7;margin-bottom:16px;font-weight:500}
+.wc-sections{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.wc-section{padding:12px 14px;border-radius:8px;border-left:3px solid}
+.wc-section.green{background:rgba(0,255,136,0.05);border-color:var(--green)}
+.wc-section.orange{background:rgba(255,107,53,0.05);border-color:var(--orange)}
+.wc-section.red{background:rgba(255,51,102,0.05);border-color:var(--red)}
+.wc-section.blue{background:rgba(0,212,255,0.05);border-color:var(--cyan)}
+.wc-section-title{font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:0.15em;margin-bottom:6px}
+.wc-section.green .wc-section-title{color:var(--green)}
+.wc-section.orange .wc-section-title{color:var(--orange)}
+.wc-section.red .wc-section-title{color:var(--red)}
+.wc-section.blue .wc-section-title{color:var(--cyan)}
+.wc-bullet{font-size:13px;color:#d0dff0;line-height:1.6;margin-bottom:3px}
+.wc-next-after{background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(0,136,204,0.15));
+  border:1px solid rgba(0,212,255,0.4);color:var(--cyan);
+  font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;
+  padding:10px 24px;border-radius:8px;cursor:pointer;letter-spacing:0.08em;
+  transition:all 0.2s;width:100%;margin-top:4px}
+.wc-next-after:hover{background:rgba(0,212,255,0.2)}
+@keyframes writtenPulse{
+  0%,100%{box-shadow:0 0 12px rgba(124,58,237,0.3);transform:scale(1);}
+  50%{box-shadow:0 0 24px rgba(124,58,237,0.7);transform:scale(1.06);}
+}
+</style>
+
+<script src="sap.js"></script>
+</body>
+</html>
