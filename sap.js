@@ -1201,37 +1201,91 @@ const CHS=[
 ══════════════════════════════════ */
 const WRITTEN_CHS = [
   {id:"w1",title:"Explain SQL Injection to a Non-Technical Executive",diff:"Medium",cat:"Injection",
-   prompt:"You are briefing the CEO before a board meeting. In 3-4 sentences, explain what SQL injection is, give a real-world example of its impact, and state the single most important technical control to prevent it. Write in plain English — no jargon.",
-   rubric:"Should cover: (1) injecting malicious SQL via user input, (2) a real impact (data theft, auth bypass, data deletion), (3) parameterized queries as the key control. Bonus for mentioning a real breach (e.g., TalkTalk 2015).",
-   src:"OWASP A03:2021",example:"SQL injection is when attackers insert database commands into web form fields..."},
+   prompt:"You are briefing the CEO before a board meeting. Write at least 150 words explaining: (1) what SQL injection is in plain English, (2) a real-world example of its impact on a real organization, (3) the most important technical control to prevent it, and (4) why developers keep making this mistake.",
+   rubric:"Strong answers cover all four points with clarity, accuracy, and no unnecessary jargon.",
+   src:"OWASP A03:2021",
+   rubricItems:[
+     {id:"r1a",text:"Explains SQL injection as attackers inserting malicious database commands into user input fields",pts:25},
+     {id:"r1b",text:"Mentions a real breach or real-world impact (data theft, authentication bypass, data deletion, or names a real incident)",pts:25},
+     {id:"r1c",text:"Identifies parameterized queries / prepared statements as the primary control",pts:25},
+     {id:"r1d",text:"Addresses why it keeps happening (trust of user input, developer oversight, legacy code, or time pressure)",pts:15},
+     {id:"r1e",text:"Written in plain English — no unexplained acronyms, suitable for a non-technical executive",pts:10},
+   ]},
   {id:"w2",title:"Write an Incident Response Containment Decision",diff:"Hard",cat:"Incident Response",
-   prompt:"You are the SOC lead. At 2am, ransomware is detected actively encrypting files on 3 servers. You have two choices: (A) immediately isolate all 3 servers from the network, or (B) monitor for 30 more minutes to gather attacker intelligence before isolating. Write a 4-6 sentence decision memo justifying your choice, addressing the trade-offs of both options.",
-   rubric:"A strong answer should acknowledge: isolation stops encryption spread (A) but may trigger killswitches or lose intelligence (B). Should reference NIST SP 800-61 containment principles. Should mention backup status, business impact, and attacker TTP intelligence value.",
-   src:"NIST SP 800-61 / SANS SEC504",example:"Given the active encryption, I recommend immediate isolation (Option A)..."},
-  {id:"w3",title:"Threat Model a Publicly Accessible API",diff:"Hard",cat:"Secure Coding",
-   prompt:"A new REST API endpoint will be publicly accessible: POST /api/v1/reset-password?email={user_email}. Using STRIDE threat modeling, identify at least 4 specific threats against this endpoint and briefly state the mitigation for each threat.",
-   rubric:"Should identify threats from multiple STRIDE categories: Spoofing (attacker resets another's password), Tampering (manipulate the reset token), Repudiation (no logging of reset requests), Information Disclosure (email enumeration via different responses), DoS (flood endpoint), Elevation of Privilege (reset admin account). Mitigations should be specific and actionable.",
-   src:"Microsoft STRIDE / OWASP Authentication Cheat Sheet",example:"Spoofing: An attacker could trigger resets for any email address..."},
-  {id:"w4",title:"Explain the Supply Chain Risk in Your CI/CD Pipeline",diff:"Medium",cat:"Supply Chain",
-   prompt:"Your organization's CI/CD pipeline uses: GitHub Actions, npm packages pulled at build time, a Docker base image tagged 'latest', and Dependabot for automated updates. Write a 4-5 sentence risk assessment identifying the top 3 supply chain attack vectors in this setup and what you would change.",
-   rubric:"Should identify: (1) 'latest' Docker tag is mutable and can be silently replaced (use SHA256 digests), (2) npm packages without lockfile verification or integrity checks, (3) Dependabot auto-merging PRs from compromised upstream packages without review (reference Bitwarden/TeamPCP cascade). Should recommend specific mitigations: pinned digests, npm ci with lockfile, manual review of Dependabot PRs.",
-   src:"SANS @RISK Vol.26 No.17 / OWASP A08:2021",example:"Our top supply chain risks are: First, using 'latest' Docker tags..."},
-  {id:"w5",title:"Write a CVE Advisory Summary for a Non-Technical Audience",diff:"Easy",cat:"CVE Brief",
-   prompt:"CVE-2026-40175 (CVSS 10.0): Axios HTTP library has 'Unrestricted Cloud Metadata Exfiltration via Header Injection Chain.' Write a 3-sentence plain-English advisory explaining: (1) what the vulnerability is, (2) who is at risk, (3) what they should do immediately.",
-   rubric:"Should avoid jargon. Should explain: (1) Axios can be tricked into sending requests to cloud metadata services leaking credentials, (2) any cloud application using Axios for HTTP requests, (3) update Axios immediately and audit for redirect handling in code.",
-   src:"SANS @RISK Vol.26 No.16 / CVE-2026-40175",example:"A critical vulnerability was discovered in a widely-used web library called Axios..."},
-  {id:"w6",title:"Design a Zero Trust Network Policy for Remote Workers",diff:"Hard",cat:"Network",
-   prompt:"Your organization is moving to a Zero Trust model. 200 employees work remotely using personal devices. Write a 5-6 sentence policy outlining the key Zero Trust controls you would implement, referencing NIST SP 800-207 principles. Be specific about what changes from a traditional VPN model.",
-   rubric:"Should reference NIST SP 800-207 principles: never trust, always verify. Should mention: device health attestation (not just credentials), identity + device + risk signals before access, microsegmentation replacing network-level trust, Conditional Access policies, JIT/JEA access instead of persistent VPN tunnels. Contrast with VPN = network location = trust (now replaced).",
-   src:"NIST SP 800-207 / CISA Zero Trust Maturity Model",example:"Under our Zero Trust model, network location will no longer confer trust..."},
-  {id:"w7",title:"Analyze and Improve a Vulnerable Code Sample",diff:"Hard",cat:"Secure Coding",
-   prompt:"Review this Node.js code and write a 4-5 sentence security analysis: (1) identify all vulnerabilities, (2) explain the impact of each, (3) provide the corrected code. Code: app.get('/user',(req,res)=>{ const id=req.query.id; const query='SELECT * FROM users WHERE id='+id; db.query(query,(err,rows)=>{ res.json(rows); }); });",
-   rubric:"Should identify: (1) SQL injection via string concatenation — fix with parameterized query db.query('SELECT name,email FROM users WHERE id=?',[id]), (2) IDOR — no authentication or ownership check, (3) mass data exposure — SELECT * returns all columns, (4) no error handling leaking DB errors to client.",
-   src:"OWASP A03:2021 / OWASP A01:2021",example:"This code has three security vulnerabilities..."},
-{id:"w8",title:"Write a Jailbreak Detection Policy for an AI Chatbot",diff:"Medium",cat:"AI Security",
-   prompt:"Your company is deploying an internal AI assistant. Write a 4-5 sentence policy for your security team covering: (1) what prompt injection and jailbreak attempts look like, (2) how to detect them in production, (3) what the AI should do when it detects an attempt.",
-   rubric:"Should identify jailbreak patterns: persona overrides (DAN, Developer Mode), instruction overrides ('ignore previous instructions'), indirect injection via documents. Detection: output monitoring, input classification, anomaly detection on unusual patterns. Response: refuse and log, not reveal system prompt, alert security team for repeated attempts. Reference OWASP LLM01:2025.",
-   src:"OWASP LLM01:2025 / OWASP LLM06:2025",example:"Prompt injection attempts typically include instructions to override system behavior..."},
+   prompt:"You are the SOC lead. At 2am, ransomware is detected actively encrypting files on 3 servers. Write at least 150 words: a decision memo choosing between (A) immediately isolating all 3 servers or (B) monitoring 30 more minutes to gather intelligence. Justify your choice, address the trade-offs of BOTH options, reference NIST SP 800-61, and state what you would do about backups.",
+   rubric:"Strong answers make a clear decision, acknowledge both sides honestly, cite NIST SP 800-61, and address backup status.",
+   src:"NIST SP 800-61 / SANS SEC504",
+   rubricItems:[
+     {id:"r2a",text:"Makes a clear decision (A or B) and states it explicitly with justification",pts:20},
+     {id:"r2b",text:"Addresses trade-offs of BOTH options — not just the chosen one",pts:20},
+     {id:"r2c",text:"References NIST SP 800-61 containment principles or phases",pts:20},
+     {id:"r2d",text:"Mentions backup status and how it affects the decision",pts:20},
+     {id:"r2e",text:"Acknowledges the killswitch / evidence destruction risk of immediate isolation",pts:20},
+   ]},
+  {id:"w3",title:"Threat Model a Password Reset API with STRIDE",diff:"Hard",cat:"Secure Coding",
+   prompt:"A new REST API endpoint will be publicly accessible: POST /api/v1/reset-password?email={user_email}. Write at least 150 words identifying at least 4 specific STRIDE threats against this endpoint. For each threat, name the STRIDE category, describe the specific attack, and state the mitigation.",
+   rubric:"Strong answers correctly apply STRIDE categories with specific attacks and actionable mitigations for each.",
+   src:"Microsoft STRIDE / OWASP Authentication Cheat Sheet",
+   rubricItems:[
+     {id:"r3a",text:"Identifies Spoofing threat — e.g., attacker triggers resets for other users' emails",pts:20},
+     {id:"r3b",text:"Identifies Information Disclosure — e.g., different responses reveal whether an email exists (enumeration)",pts:20},
+     {id:"r3c",text:"Identifies Denial of Service — e.g., flooding the endpoint to lock out users or exhaust resources",pts:20},
+     {id:"r3d",text:"Identifies a 4th valid STRIDE threat (Tampering, Repudiation, or Elevation of Privilege) with correct category label",pts:20},
+     {id:"r3e",text:"Each threat has a specific, actionable mitigation (not just 'add security')",pts:20},
+   ]},
+  {id:"w4",title:"CI/CD Pipeline Supply Chain Risk Assessment",diff:"Medium",cat:"Supply Chain",
+   prompt:"Your CI/CD pipeline uses: GitHub Actions, npm packages pulled at build time, a Docker base image tagged 'latest', and Dependabot for automated updates. Write at least 150 words identifying the top 3 supply chain attack vectors in this setup, explain why each is dangerous, and state the specific technical change you would make to mitigate each one.",
+   rubric:"Strong answers identify the three key risks with specific technical mitigations, not vague advice.",
+   src:"SANS @RISK Vol.26 No.17 / OWASP A08:2021",
+   rubricItems:[
+     {id:"r4a",text:"Identifies 'latest' Docker tag as mutable and proposes using immutable SHA256 digest pinning",pts:25},
+     {id:"r4b",text:"Identifies npm package integrity risk and proposes npm ci with lockfile or checksum verification",pts:25},
+     {id:"r4c",text:"Identifies Dependabot auto-merge risk and proposes requiring human review of dependency update PRs",pts:25},
+     {id:"r4d",text:"Explains WHY each risk is dangerous — not just states it exists",pts:25},
+   ]},
+  {id:"w5",title:"Write a CVE Advisory for a Non-Technical Audience",diff:"Easy",cat:"CVE Brief",
+   prompt:"CVE-2026-40175 (CVSS 10.0): Axios HTTP library — 'Unrestricted Cloud Metadata Exfiltration via Header Injection Chain.' Write at least 150 words explaining to a non-technical business audience: (1) what the vulnerability is, (2) what an attacker can do with it, (3) who is at risk, (4) what to do immediately, and (5) why CVSS 10.0 is the highest possible score.",
+   rubric:"Strong answers explain all five points without jargon and convey appropriate urgency.",
+   src:"SANS @RISK Vol.26 No.16 / CVE-2026-40175",
+   rubricItems:[
+     {id:"r5a",text:"Explains what the vulnerability is without using unexplained technical terms",pts:20},
+     {id:"r5b",text:"Explains the real-world impact — attacker can steal cloud credentials (IAM keys) and access cloud resources",pts:20},
+     {id:"r5c",text:"Identifies who is at risk — any cloud application using the Axios HTTP library",pts:20},
+     {id:"r5d",text:"States clear immediate action — update Axios to a patched version",pts:20},
+     {id:"r5e",text:"Explains CVSS 10.0 means: network-accessible, no authentication required, no user interaction, complete impact",pts:20},
+   ]},
+  {id:"w6",title:"Design a Zero Trust Policy for Remote Workers",diff:"Hard",cat:"Network",
+   prompt:"Your organization is moving from traditional VPN to Zero Trust. 200 employees work remotely on personal devices. Write at least 150 words describing your Zero Trust policy, referencing NIST SP 800-207. Cover: what changes from VPN, device health requirements, how access decisions are made, and what microsegmentation achieves.",
+   rubric:"Strong answers contrast VPN with Zero Trust accurately, reference NIST SP 800-207, and address all four coverage areas.",
+   src:"NIST SP 800-207 / CISA Zero Trust Maturity Model",
+   rubricItems:[
+     {id:"r6a",text:"References NIST SP 800-207 by name and correctly states its core principle (never trust, always verify)",pts:20},
+     {id:"r6b",text:"Contrasts VPN model (network location = trust) with Zero Trust (identity + device + risk = access decision)",pts:25},
+     {id:"r6c",text:"Addresses device health attestation — not just username/password authentication",pts:20},
+     {id:"r6d",text:"Explains microsegmentation — limits lateral movement even if a device is compromised",pts:20},
+     {id:"r6e",text:"Mentions Conditional Access or JIT/JEA (just-in-time / just-enough-access) as a specific control",pts:15},
+   ]},
+  {id:"w7",title:"Analyze and Fix a Vulnerable Node.js Code Sample",diff:"Hard",cat:"Secure Coding",
+   prompt:"Write at least 150 words analyzing this Node.js code: app.get('/user',(req,res)=>{ const id=req.query.id; const query='SELECT * FROM users WHERE id='+id; db.query(query,(err,rows)=>{ res.json(rows); }); }); Identify ALL security vulnerabilities, explain the impact of each, and provide the corrected version of the code with an explanation of each fix.",
+   rubric:"Strong answers identify all four vulnerabilities with impacts and provide correct fixed code.",
+   src:"OWASP A03:2021 / OWASP A01:2021",
+   rubricItems:[
+     {id:"r7a",text:"Identifies SQL injection via string concatenation and provides parameterized query fix: db.query('...WHERE id=?',[id])",pts:25},
+     {id:"r7b",text:"Identifies IDOR / missing authentication — any user can query any user ID with no ownership check",pts:25},
+     {id:"r7c",text:"Identifies mass data exposure — SELECT * returns all columns including sensitive fields",pts:25},
+     {id:"r7d",text:"Identifies missing error handling — database errors leak to client revealing schema or stack info",pts:25},
+   ]},
+  {id:"w8",title:"Write an AI Jailbreak Detection Policy",diff:"Medium",cat:"AI Security",
+   prompt:"Your company is deploying an internal AI assistant for employees. Write at least 150 words creating a security policy covering: (1) specific examples of what prompt injection and jailbreak attempts look like, (2) how your team will detect them in production logs, (3) what the AI system should do when it detects an attempt, and (4) how you will handle repeated offenders. Reference OWASP LLM01:2025.",
+   rubric:"Strong answers give specific examples, concrete detection methods, clear AI response behavior, and reference OWASP LLM01:2025.",
+   src:"OWASP LLM01:2025 / OWASP LLM06:2025",
+   rubricItems:[
+     {id:"r8a",text:"References OWASP LLM01:2025 by name",pts:10},
+     {id:"r8b",text:"Gives specific jailbreak examples — DAN persona, 'ignore previous instructions', role-playing as unrestricted AI",pts:25},
+     {id:"r8c",text:"States concrete detection method — log monitoring, input classification, anomaly detection, or human review queue",pts:25},
+     {id:"r8d",text:"Defines what the AI should do — refuse, log the attempt, do NOT reveal system prompt, and optionally alert security",pts:25},
+     {id:"r8e",text:"Addresses repeated offenders — user warning, account review, or access revocation policy",pts:15},
+   ]},
 ];
 
 /* ══ CATEGORY DEFINITIONS ══ */
@@ -1603,8 +1657,13 @@ function handleMatch(el,ch){
 function markSolved(ch,pts){
   if(solved.has(ch.id))return;
   const bonus=streak>=3?50:streak>=1?20:0;
+  const prevSize=solved.size;
   score+=pts+bonus;streak++;solved.add(ch.id);save();
+  console.log("[SAP] markSolved fired — solved:", solved.size, "prevSize:", prevSize, "ch:", ch.id);
   updateHUD();renderSidebar();checkTrophies();
+  updateWrittenBadge();
+  updateWrittenStrip();
+  checkWrittenUnlock(prevSize);
   flashNotif("+" + (pts+bonus) + " pts" + (bonus ? " ("+bonus+" streak bonus!)" : "") + (streak>=3 ? " STREAK x"+streak : ""), "green");
 }
 
@@ -1764,18 +1823,20 @@ function renderWrittenChallenge(){
     <div class="wc-title">${ch.title}</div>
     <div class="wc-prompt">${ch.prompt}</div>
     <div class="wc-hint">💡 Think about: ${ch.rubric.split(".")[0]}.</div>
-    <textarea class="wc-input" id="wcInput" placeholder="Write your answer here (aim for 3-6 sentences)..." rows="8"></textarea>
+    <textarea class="wc-input" id="wcInput" placeholder="Write your answer here — minimum 150 words required..." rows="10"></textarea>
     <div class="wc-actions">
       <button class="wc-prev" onclick="prevWritten()">← Prev</button>
       <div class="wc-word-count" id="wcWords">0 words</div>
-      <button class="wc-submit" id="wcSubmit" onclick="submitWritten()">▶ SUBMIT FOR AI REVIEW</button>
+      <button class="wc-submit" id="wcSubmit" onclick="submitWritten()">▶ SUBMIT & SELF-SCORE</button>
       <button class="wc-next" onclick="nextWritten()">Next →</button>
     </div>
     <div class="wc-feedback" id="wcFeedback" style="display:none"></div>
   `;
   document.getElementById("wcInput").addEventListener("input",e=>{
     const words=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;
-    document.getElementById("wcWords").textContent=words+" words";
+    const wEl=document.getElementById("wcWords");
+    wEl.textContent=words+" / 150 words";
+    wEl.style.color=words>=150?"var(--green)":words>=100?"var(--yellow)":"var(--dim)";
   });
 }
 
@@ -1788,105 +1849,155 @@ function nextWritten(){
   renderWrittenChallenge();
 }
 
-async function submitWritten(){
+function submitWritten(){
   const ch=WRITTEN_CHS[writtenState.chIdx%WRITTEN_CHS.length];
   const answer=document.getElementById("wcInput")?.value?.trim();
-  if(!answer||answer.length<20){
-    flashNotif("Please write a more complete answer before submitting","cyan");
+  const wordCount=answer?answer.split(/\s+/).filter(w=>w.length>0).length:0;
+
+  if(!answer||wordCount<150){
+    flashNotif("Minimum 150 words required — you have "+wordCount+" words","cyan");
+    const wEl=document.getElementById("wcWords");
+    if(wEl){wEl.style.color="var(--red)";setTimeout(()=>wEl.style.color="",2000);}
     return;
   }
-  writtenState.scoring=true;
+
   const btn=document.getElementById("wcSubmit");
   const fb=document.getElementById("wcFeedback");
   btn.disabled=true;
-  btn.textContent="⏳ AI reviewing...";
+  btn.textContent="✓ Answer Submitted";
   fb.style.display="block";
-  fb.innerHTML=`<div class="wc-loading"><div class="wc-spinner"></div><div>Analyzing your response against the rubric...</div></div>`;
 
-  try {
-    // Build the grading prompt
-    const gradingPrompt=`You are a cybersecurity instructor grading a written response. Be encouraging but honest.
-
-CHALLENGE: ${ch.title}
-
-PROMPT GIVEN TO STUDENT:
-${ch.prompt}
-
-GRADING RUBRIC:
-${ch.rubric}
-
-STUDENT'S ANSWER:
-${answer}
-
-Grade this response. Respond with ONLY a JSON object (no markdown, no backticks):
-{
-  "score": <number 1-5>,
-  "grade": "<A/B/C/D/F>",
-  "summary": "<2 sentence overall assessment>",
-  "strengths": ["<strength 1>", "<strength 2>"],
-  "improvements": ["<improvement 1>", "<improvement 2>"],
-  "missed_concepts": ["<concept missed, if any>"],
-  "model_points": "<2-3 sentences of what an ideal answer would include>"
-}`;
-
-    // Call /api/review — works on both localhost (proxy.js) and Vercel (serverless fn)
-    const resp=await fetch("/api/review",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({prompt:gradingPrompt})
-    });
-    if(!resp.ok){
-      const errData=await resp.json().catch(()=>({}));
-      throw new Error(errData.error||"Server returned "+resp.status);
-    }
-    const data=await resp.json();
-    const text=(data.text||"").replace(/```json|```/g,"").trim();
-    const result=JSON.parse(text);
-    writtenState.feedback=result;
-    writtenState.submitted=true;
-
-    const scoreColors={5:"#00ff88",4:"#a8e063",3:"#ffd700",2:"#ff6b35",1:"#ff3366"};
-    const gradeColor=scoreColors[result.score]||"#00d4ff";
-
-    // Award points for completion
-    const pts=result.score*40;
-    score+=pts;save();updateHUD();
-
-    fb.innerHTML=`
-      <div class="wc-result">
-        <div class="wc-score-row">
-          <div class="wc-score-badge" style="background:${gradeColor}20;border-color:${gradeColor};color:${gradeColor}">
-            <span class="wc-grade">${result.grade}</span>
-            <span class="wc-stars">${"★".repeat(result.score)}${"☆".repeat(5-result.score)}</span>
-          </div>
-          <div class="wc-pts-earned">+${pts} pts earned</div>
+  // Build the self-scoring rubric checklist
+  const totalPts=ch.rubricItems.reduce((s,r)=>s+r.pts,0);
+  fb.innerHTML=`
+    <div class="wc-rubric">
+      <div class="wc-rubric-header">
+        <div class="wc-rubric-title">📋 GRADING RUBRIC — Self-Score Your Answer</div>
+        <div class="wc-rubric-sub">Read each criterion carefully. Check every box that your answer genuinely covers. Be honest — this is for your own learning.</div>
+      </div>
+      <div class="wc-rubric-answer">
+        <div class="wc-rubric-ans-label">YOUR ANSWER:</div>
+        <div class="wc-rubric-ans-text">${escHtml(answer)}</div>
+      </div>
+      <div class="wc-rubric-items" id="rubricItems">
+        ${ch.rubricItems.map((r,i)=>`
+          <label class="rubric-item" id="ri_${r.id}">
+            <input type="checkbox" class="rubric-check" data-pts="${r.pts}" data-id="${r.id}" onchange="updateRubricScore('${ch.id}')">
+            <div class="rubric-item-body">
+              <div class="rubric-item-text">${r.text}</div>
+              <div class="rubric-item-pts">+${r.pts} pts</div>
+            </div>
+          </label>`).join("")}
+      </div>
+      <div class="wc-rubric-score-row">
+        <div class="wc-rubric-tally">
+          Score: <span id="rubricScore" style="color:var(--cyan);font-weight:700">0</span> / ${totalPts} pts
+          &nbsp;·&nbsp; Grade: <span id="rubricGrade" style="color:var(--dim)">—</span>
         </div>
-        <div class="wc-summary">${result.summary}</div>
-        <div class="wc-sections">
-          <div class="wc-section green">
-            <div class="wc-section-title">✓ STRENGTHS</div>
-            ${result.strengths.map(s=>`<div class="wc-bullet">◆ ${s}</div>`).join("")}
-          </div>
-          ${result.improvements.length?`<div class="wc-section orange">
-            <div class="wc-section-title">↑ IMPROVE</div>
-            ${result.improvements.map(s=>`<div class="wc-bullet">◆ ${s}</div>`).join("")}
-          </div>`:""}
-          ${result.missed_concepts&&result.missed_concepts.length&&result.missed_concepts[0]?`<div class="wc-section red">
-            <div class="wc-section-title">⚠ CONCEPTS TO REVIEW</div>
-            ${result.missed_concepts.map(s=>`<div class="wc-bullet">◆ ${s}</div>`).join("")}
-          </div>`:""}
-          <div class="wc-section blue">
-            <div class="wc-section-title">💡 IDEAL ANSWER INCLUDES</div>
-            <div style="font-size:13px;line-height:1.7;color:#d0dff0">${result.model_points}</div>
-          </div>
+        <button class="wc-submit-score" id="rubricSubmitBtn" onclick="finaliseRubricScore('${ch.id}')" disabled>
+          ▶ SUBMIT SCORE
+        </button>
+      </div>
+    </div>`;
+}
+
+function updateRubricScore(chId){
+  const checks=document.querySelectorAll(".rubric-check");
+  let total=0;
+  const ch=WRITTEN_CHS.find(c=>c.id===chId);
+  const maxPts=ch.rubricItems.reduce((s,r)=>s+r.pts,0);
+
+  checks.forEach(c=>{
+    if(c.checked) total+=parseInt(c.dataset.pts);
+    const lbl=c.closest(".rubric-item");
+    if(lbl) lbl.style.borderColor=c.checked?"rgba(0,255,136,0.4)":"rgba(0,212,255,0.12)";
+    if(lbl) lbl.style.background=c.checked?"rgba(0,255,136,0.06)":"rgba(255,255,255,0.02)";
+  });
+
+  const pct=total/maxPts;
+  const grade=pct>=0.9?"A":pct>=0.8?"B":pct>=0.7?"C":pct>=0.6?"D":"F";
+  const gradeColor={A:"#00ff88",B:"#a8e063",C:"#ffd700",D:"#ff6b35",F:"#ff3366"}[grade];
+
+  document.getElementById("rubricScore").textContent=total;
+  const gEl=document.getElementById("rubricGrade");
+  gEl.textContent=grade;gEl.style.color=gradeColor;
+
+  // Enable submit once at least one box is checked (or all are evaluated)
+  document.getElementById("rubricSubmitBtn").disabled=false;
+  writtenState._pendingScore=total;
+  writtenState._pendingGrade=grade;
+  writtenState._pendingColor=gradeColor;
+  writtenState._maxPts=maxPts;
+}
+
+function finaliseRubricScore(chId){
+  const ch=WRITTEN_CHS.find(c=>c.id===chId);
+  const earned=writtenState._pendingScore||0;
+  const grade=writtenState._pendingGrade||"F";
+  const gradeColor=writtenState._pendingColor||"#ff3366";
+  const maxPts=writtenState._maxPts||100;
+  const pct=earned/maxPts;
+  const stars=pct>=0.9?5:pct>=0.8?4:pct>=0.7?3:pct>=0.6?2:1;
+
+  // Award points
+  score+=earned;save();updateHUD();
+  writtenState.submitted=true;
+
+  const fb=document.getElementById("wcFeedback");
+  fb.innerHTML=`
+    <div class="wc-result">
+      <div class="wc-score-row">
+        <div class="wc-score-badge" style="background:${gradeColor}20;border-color:${gradeColor};color:${gradeColor}">
+          <span class="wc-grade">${grade}</span>
+          <span class="wc-stars">${"★".repeat(stars)}${"☆".repeat(5-stars)}</span>
         </div>
-        <button class="wc-next-after" onclick="nextWritten()">Next Challenge →</button>
-      </div>`;
-    btn.textContent="✓ Submitted";
-  } catch(err){
-    fb.innerHTML=`<div style="color:var(--red);font-family:var(--font-mono);font-size:12px;padding:16px">AI review unavailable — check your connection and try again.<br><small>${err.message}</small></div>`;
-    btn.disabled=false;
-    btn.textContent="▶ SUBMIT FOR AI REVIEW";
+        <div>
+          <div class="wc-pts-earned">+${earned} pts earned</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-top:2px">${earned} / ${maxPts} rubric points</div>
+        </div>
+      </div>
+      <div class="wc-summary" style="margin-bottom:0">
+        ${grade==="A"?"Excellent work — you covered the key concepts thoroughly.":
+          grade==="B"?"Strong answer — you covered most of the key points.":
+          grade==="C"?"Solid foundation — review the unchecked criteria and try again.":
+          grade==="D"?"Partial credit — several key concepts were missing from your answer.":
+          "Keep studying — review the rubric criteria and rewrite this challenge."}
+        ${earned<maxPts?`<span style="color:var(--cyan)"> Unchecked criteria show exactly what to add if you rewrite your answer.</span>`:""}
+      </div>
+      <button class="wc-next-after" style="margin-top:16px" onclick="nextWritten()">Next Challenge →</button>
+      <button class="wc-next-after" style="margin-top:8px;background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.3);color:var(--cyan)" onclick="retryWritten()">↺ Rewrite This Challenge</button>
+    </div>`;
+  document.getElementById("rubricSubmitBtn")?.remove();
+}
+
+function retryWritten(){
+  writtenState.submitted=false;
+  renderWrittenChallenge();
+}
+
+function updateWrittenStrip(){
+  console.log("[SAP] updateWrittenStrip — solved.size:", solved.size);
+  // Show or hide the Written Lab unlock strip in the sidebar
+  const strip=document.getElementById("writtenUnlockStrip");
+  if(!strip)return;
+  if(solved.size>=5){
+    strip.style.display="block";
+    strip.innerHTML=`<div style="background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(0,212,255,0.08));border:1px solid rgba(124,58,237,0.5);border-radius:10px;padding:14px 16px;text-align:center;cursor:pointer" onclick="openWrittenLab()">
+      <div style="font-size:20px;margin-bottom:4px">✍️</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;color:#c4b5fd;letter-spacing:.15em;margin-bottom:4px">WRITTEN LAB UNLOCKED</div>
+      <div style="font-size:12px;color:#d0dff0;margin-bottom:8px">Open-ended AI-graded challenges</div>
+      <div style="background:rgba(124,58,237,0.3);border:1px solid rgba(124,58,237,0.6);color:#c4b5fd;font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;padding:7px 14px;border-radius:6px;letter-spacing:.08em">▶ OPEN WRITTEN LAB</div>
+    </div>`;
+  } else {
+    const remaining=5-solved.size;
+    strip.style.display="block";
+    strip.innerHTML=`<div style="background:rgba(124,58,237,0.05);border:1px solid rgba(124,58,237,0.15);border-radius:10px;padding:12px 14px;text-align:center">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.1em;margin-bottom:6px">WRITTEN LAB</div>
+      <div style="font-size:12px;color:var(--dim2)">Solve <strong style="color:#c4b5fd">${remaining}</strong> more challenge${remaining!==1?"s":""} to unlock</div>
+      <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px">
+        <div style="height:100%;width:${Math.min((solved.size/5)*100,100)}%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:2px;transition:width .5s"></div>
+      </div>
+    </div>`;
   }
 }
 
@@ -1910,7 +2021,9 @@ function updateWrittenBadge(){
 }
 
 function checkWrittenUnlock(prevSize){
+  console.log("[SAP] checkWrittenUnlock — prevSize:", prevSize, "solved.size:", solved.size);
   if(prevSize<5 && solved.size>=5){
+    console.log("[SAP] 🎉 UNLOCKING WRITTEN LAB NOW");
     // Just unlocked!
     setTimeout(()=>{
       showTrophyToast({
@@ -1934,5 +2047,7 @@ function checkWrittenUnlock(prevSize){
 function init(){
   load();updateHUD();buildCatGrid();buildIntelMini();
   updateWrittenBadge();
+  // If already unlocked on load, update the sidebar unlock strip too
+  updateWrittenStrip();
 }
 init();

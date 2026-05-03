@@ -898,3 +898,75 @@ body{
   font-family:'Share Tech Mono',monospace;font-size:13px;
   color:var(--green);padding:12px 0 0;
 }
+
+/* ── WRITTEN LAB RUBRIC SELF-SCORING ── */
+.wc-rubric{padding:4px 0;}
+.wc-rubric-header{margin-bottom:16px;}
+.wc-rubric-title{
+  font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;
+  color:#00d4ff;letter-spacing:0.12em;margin-bottom:6px;
+}
+.wc-rubric-sub{
+  font-size:13px;color:#d0dff0;line-height:1.6;
+}
+.wc-rubric-answer{
+  background:rgba(0,0,0,0.3);border:1px solid rgba(0,212,255,0.12);
+  border-radius:8px;padding:14px;margin-bottom:16px;max-height:160px;
+  overflow-y:auto;
+}
+.wc-rubric-ans-label{
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  color:var(--dim);letter-spacing:0.15em;margin-bottom:6px;
+}
+.wc-rubric-ans-text{
+  font-size:13px;color:#d0dff0;line-height:1.7;white-space:pre-wrap;
+}
+.wc-rubric-items{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.rubric-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 16px;border-radius:8px;cursor:pointer;
+  border:1px solid rgba(0,212,255,0.12);
+  background:rgba(255,255,255,0.02);
+  transition:all 0.2s;
+}
+.rubric-item:hover{
+  border-color:rgba(0,212,255,0.3);
+  background:rgba(0,212,255,0.04);
+}
+.rubric-check{
+  width:20px;height:20px;flex-shrink:0;
+  accent-color:var(--green);cursor:pointer;
+  margin-top:2px;
+}
+.rubric-item-body{flex:1;}
+.rubric-item-text{
+  font-size:14px;color:#d0dff0;line-height:1.6;font-weight:500;
+  margin-bottom:4px;
+}
+.rubric-item-pts{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--cyan);letter-spacing:0.08em;
+}
+.wc-rubric-score-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  background:rgba(0,212,255,0.04);
+  border:1px solid rgba(0,212,255,0.15);
+  border-radius:10px;flex-wrap:wrap;gap:10px;
+}
+.wc-rubric-tally{
+  font-family:'Share Tech Mono',monospace;font-size:14px;color:#d0dff0;
+}
+.wc-submit-score{
+  background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(124,58,237,0.15));
+  border:1px solid rgba(124,58,237,0.5);color:#c4b5fd;
+  font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;
+  padding:10px 22px;border-radius:8px;cursor:pointer;
+  transition:all 0.2s;letter-spacing:0.08em;
+}
+.wc-submit-score:hover:not(:disabled){
+  background:rgba(124,58,237,0.4);border-color:var(--purple);
+}
+.wc-submit-score:disabled{
+  opacity:0.4;cursor:not-allowed;
+}
