@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="140" viewBox="0 0 640 140" font-family="'JetBrains Mono', 'Courier New', monospace">
+  <defs>
+    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Transparent background — drops onto any navy surface -->
+  <g filter="url(#cyanGlow)">
+    <!-- Left bracket -->
+    <path d="M 60 40 L 40 40 L 40 100 L 60 100"
+          fill="none" stroke="#4FC3F7" stroke-width="5"
+          stroke-linecap="square" stroke-linejoin="miter"/>
+    <!-- SAP wordmark -->
+    <text x="320" y="92" font-size="68" font-weight="700"
+          fill="#4FC3F7" text-anchor="middle"
+          letter-spacing="6">SAP</text>
+    <!-- Right bracket -->
+    <path d="M 580 40 L 600 40 L 600 100 L 580 100"
+          fill="none" stroke="#4FC3F7" stroke-width="5"
+          stroke-linecap="square" stroke-linejoin="miter"/>
+  </g>
+</svg>

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="900" viewBox="0 0 800 900" font-family="'JetBrains Mono', 'Courier New', monospace">
+  <!-- ═══════════════════════════════════════════════════════════════
+       SAP // Security Awareness Platform — Logo Sheet
+       Three lockups, share the same DNA: bracket-wrapped wordmark,
+       neon cyan on deep navy, mono caps.
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <defs>
+    <!-- Neon cyan glow — used by all three lockups -->
+    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Softer halo for the wordmark in the stacked lockup -->
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Page background -->
+  <rect width="800" height="900" fill="#0B1733"/>
+
+  <!-- ─── Lockup 1: SQUARE ICON ─── -->
+  <!-- For favicons, app icons, social avatars. 256x256 with deep navy fill. -->
+  <g transform="translate(80, 60)">
+    <!-- Background tile -->
+    <rect x="0" y="0" width="240" height="240" rx="24" fill="#11203F" stroke="#2A3B5E" stroke-width="1"/>
+
+    <!-- Inner ring (subtle, evokes the mission progress gauge) -->
+    <circle cx="120" cy="120" r="96" fill="none" stroke="#1A2B4D" stroke-width="2"/>
+    <circle cx="120" cy="120" r="96" fill="none" stroke="#4FC3F7" stroke-width="2"
+            stroke-dasharray="200 603" stroke-linecap="round" opacity="0.6"
+            transform="rotate(-90 120 120)"/>
+
+    <!-- Bracket-wrapped S -->
+    <g filter="url(#cyanGlow)">
+      <!-- Left bracket -->
+      <path d="M 56 78 L 44 78 L 44 162 L 56 162"
+            fill="none" stroke="#4FC3F7" stroke-width="6"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+      <!-- Right bracket -->
+      <path d="M 184 78 L 196 78 L 196 162 L 184 162"
+            fill="none" stroke="#4FC3F7" stroke-width="6"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+      <!-- S character, hand-shaped to match JetBrains Mono weight -->
+      <text x="120" y="146" font-size="72" font-weight="700"
+            fill="#4FC3F7" text-anchor="middle"
+            letter-spacing="-2">S</text>
+    </g>
+
+    <!-- Label below the icon for the sheet only (will not appear when icon is used standalone) -->
+    <text x="120" y="280" font-size="11" font-weight="500"
+          fill="#6A7891" text-anchor="middle" letter-spacing="2">
+      SQUARE ICON · 240×240
+    </text>
+  </g>
+
+  <!-- ─── Lockup 2: HORIZONTAL WORDMARK ─── -->
+  <!-- For the masthead, used at large sizes (300-500px wide). -->
+  <g transform="translate(80, 380)">
+    <!-- Background plate -->
+    <rect x="0" y="0" width="640" height="140" rx="12" fill="#11203F" stroke="#2A3B5E" stroke-width="1"/>
+
+    <g filter="url(#cyanGlow)">
+      <!-- Left bracket -->
+      <path d="M 60 50 L 40 50 L 40 110 L 60 110"
+            fill="none" stroke="#4FC3F7" stroke-width="5"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+      <!-- SAP wordmark -->
+      <text x="320" y="102" font-size="68" font-weight="700"
+            fill="#4FC3F7" text-anchor="middle"
+            letter-spacing="6">SAP</text>
+      <!-- Right bracket -->
+      <path d="M 580 50 L 600 50 L 600 110 L 580 110"
+            fill="none" stroke="#4FC3F7" stroke-width="5"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+    </g>
+
+    <text x="320" y="170" font-size="11" font-weight="500"
+          fill="#6A7891" text-anchor="middle" letter-spacing="2">
+      HORIZONTAL WORDMARK · 640×140
+    </text>
+  </g>
+
+  <!-- ─── Lockup 3: STACKED LOCKUP ─── -->
+  <!-- For README hero, splash screens, marketing. Full brand with tagline. -->
+  <g transform="translate(80, 600)">
+    <!-- Background plate -->
+    <rect x="0" y="0" width="640" height="240" rx="12" fill="#11203F" stroke="#2A3B5E" stroke-width="1"/>
+
+    <!-- Top accent line (echoes the SANS @RISK ticker) -->
+    <rect x="40" y="30" width="60" height="2" fill="#FF3B5C"/>
+    <text x="110" y="38" font-size="10" font-weight="500"
+          fill="#FF3B5C" text-anchor="start" letter-spacing="2">
+      SECURITY TRAINING
+    </text>
+
+    <!-- Mission progress dot — green status indicator -->
+    <circle cx="600" cy="36" r="4" fill="#00FF94"/>
+    <text x="592" y="40" font-size="10" font-weight="500"
+          fill="#A8B5CC" text-anchor="end" letter-spacing="2">
+      OPERATIONAL
+    </text>
+
+    <!-- Bracket wordmark, centered -->
+    <g filter="url(#cyanGlow)">
+      <path d="M 168 84 L 152 84 L 152 144 L 168 144"
+            fill="none" stroke="#4FC3F7" stroke-width="5"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+      <text x="320" y="135" font-size="64" font-weight="700"
+            fill="#4FC3F7" text-anchor="middle"
+            letter-spacing="6">SAP</text>
+      <path d="M 472 84 L 488 84 L 488 144 L 472 144"
+            fill="none" stroke="#4FC3F7" stroke-width="5"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+    </g>
+
+    <!-- Subtitle / full name -->
+    <text x="320" y="180" font-size="14" font-weight="500"
+          fill="#E6EEF8" text-anchor="middle" letter-spacing="5">
+      SECURITY AWARENESS PLATFORM
+    </text>
+
+    <!-- Tagline -->
+    <text x="320" y="208" font-size="11" font-weight="500"
+          fill="#6A7891" text-anchor="middle" letter-spacing="3"
+          font-family="'Inter', sans-serif" font-style="italic">
+      Train like you're already on shift.
+    </text>
+
+    <text x="320" y="265" font-size="11" font-weight="500"
+          fill="#6A7891" text-anchor="middle" letter-spacing="2">
+      STACKED LOCKUP · 640×240
+    </text>
+  </g>
+</svg>
