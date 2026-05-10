@@ -13,7 +13,7 @@ This edition wears its **SOC Console** skin &mdash; deep navy paper, neon cyan a
 🚀 **[Try the Live App](https://jdbostonbu-ops.github.io/sap/)**
 
 <p align="center">
-  <img src="sap.gif" alt="SAP Security Awareness Platform" width="300">
+  <img src="sap.gif" alt="SAP Security Awareness Platform" width="600">
 </p>
 
 ## 🎓 Built During Next Chapter — Phase I
