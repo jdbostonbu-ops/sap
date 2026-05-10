@@ -1,6 +1,7 @@
 <p align="center">
   <img src="sap-stacked.svg" alt="SAP Security Awareness Platform" width="500">
 </p>
+
 # [ SAP ] // Security Awareness Platform 🛡️
 
 A vanilla HTML/CSS/JavaScript security training game that turns the OWASP Top 10, common CVEs, and core analyst concepts into a 250-challenge progression ladder. Pick a module (OWASP, Injection, CVE Brief, Network, Cryptography, Identity & Access, Incident Response, Web Security, Cloud Security, Threat Intel, Secure Coding, Supply Chain, AI Security), answer multiple-choice and written-lab challenges, earn points and trophies, and climb the clearance ranks from **ANALYST** toward **SPECIALIST**. The written-lab grading is done client-side via a hand-built rubric matcher in pure JavaScript &mdash; no external AI API, no upload, no account, no cloud. Built with closure-based factory functions, `textContent` for all user input, and zero dependencies.
